@@ -12,5 +12,5 @@ public interface IEvent
 
     public DateTime EndDate { get; }
 
-    public AddressVO Address { get; }
+    public Address Address { get; }
 }

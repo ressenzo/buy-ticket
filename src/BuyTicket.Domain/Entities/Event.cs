@@ -9,7 +9,7 @@ public class Event : Entity, IEvent
         string description,
         DateTime startDate,
         DateTime endDate,
-        AddressVO address)
+        Address address)
     {
         Name = name;
         Description = description;
@@ -23,7 +23,7 @@ public class Event : Entity, IEvent
         string description,
         DateTime startDate,
         DateTime endDate,
-        AddressVO address) : base(id)
+        Address address) : base(id)
     {
         Name = name;
         Description = description;
@@ -40,13 +40,13 @@ public class Event : Entity, IEvent
 
     public DateTime EndDate { get; private set ;}
 
-    public AddressVO Address { get; private set; }
+    public Address Address { get; private set; }
 
     public static IEvent Construct(string name,
         string description,
         DateTime startDate,
         DateTime endDate,
-        AddressVO address) =>
+        Address address) =>
         new Event(name,
             description,
             startDate,
@@ -58,7 +58,7 @@ public class Event : Entity, IEvent
         string description,
         DateTime startDate,
         DateTime endDate,
-        AddressVO address) =>
+        Address address) =>
         new Event(id,
             name,
             description,

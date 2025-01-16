@@ -1,6 +1,6 @@
 namespace BuyTicket.Domain.ValueObjects;
 
-public record AddressVO(
+public record Address(
     string Street,
     string Number,
     string City,
