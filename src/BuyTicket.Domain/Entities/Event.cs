@@ -65,4 +65,9 @@ public class Event : Entity, IEvent
             startDate,
             endDate,
             address);
+
+    public override bool IsValid()
+    {
+        throw new NotImplementedException();
+    }
 }

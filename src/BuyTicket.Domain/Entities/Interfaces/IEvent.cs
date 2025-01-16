@@ -2,7 +2,7 @@ using BuyTicket.Domain.ValueObjects;
 
 namespace BuyTicket.Domain.Entities.Interfaces;
 
-public interface IEvent
+public interface IEvent : IEntity
 {
     public string Name { get; }
 

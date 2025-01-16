@@ -11,4 +11,6 @@ public abstract class Entity : IEntity
         Id = id;
 
     public string Id { get; }
+
+    public abstract bool IsValid();
 }
