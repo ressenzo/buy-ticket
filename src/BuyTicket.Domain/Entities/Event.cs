@@ -1,3 +1,4 @@
+using BuyTicket.Domain.Commons;
 using BuyTicket.Domain.Entities.Interfaces;
 using BuyTicket.Domain.ValueObjects;
 
@@ -68,6 +69,33 @@ public class Event : Entity, IEvent
 
     public override bool IsValid()
     {
-        throw new NotImplementedException();
+        var isValid = true;
+        if (string.IsNullOrWhiteSpace(Name))
+        {
+            AddError(Error.InvalidProperty(nameof(Name)));
+            isValid = false;
+        }
+        if (string.IsNullOrWhiteSpace(Description))
+        {
+            AddError(Error.InvalidProperty(nameof(Description)));
+            isValid = false;
+        }
+        if (StartDate < DateTime.Now)
+        {
+            AddError(Error.DateBeforeNow(nameof(StartDate)));
+            isValid = false;
+        }
+        if (StartDate > EndDate)
+        {
+            AddError(Error.DateBefore);
+            isValid = false;
+        }
+        if (Address is null)
+        {
+            AddError(Error.NullProperty(nameof(Address)));
+            isValid = false;
+        }
+
+        return isValid;
     }
 }
