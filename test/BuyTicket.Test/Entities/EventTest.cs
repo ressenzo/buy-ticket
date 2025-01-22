@@ -8,12 +8,21 @@ namespace BuyTicket.Test.Entities;
 
 public class EventTest
 {
-    private readonly string _name = "Event";
-    private readonly string _description = "Description";
-    private readonly DateTime _startDate = DateTime.Now.AddDays(1);
-    private readonly DateTime _endDate = DateTime.Now.AddDays(2);
-    private readonly Address _address = new AddressBuilder()
-        .Build();
+    private readonly string _name;
+    private readonly string _description;
+    private readonly DateTime _startDate;
+    private readonly DateTime _endDate;
+    private readonly Address _address;
+
+    public EventTest()
+    {
+        _name = "Event";
+        _description = "Description";
+        _startDate = DateTime.Now.AddDays(1);
+        _endDate = DateTime.Now.AddDays(2);
+        _address = new AddressBuilder()
+            .Build();
+    }
 
     [Fact]
     public void ShouldSetValues()
