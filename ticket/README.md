@@ -1,0 +1,1 @@
+This is the application to create tickets for a specific event
