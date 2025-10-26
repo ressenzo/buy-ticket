@@ -1,5 +1,3 @@
-using BuyTicket.Domain.ValueObjects;
-
 namespace BuyTicket.Domain.Entities.Interfaces;
 
 public interface IEvent : IEntity
@@ -12,5 +10,5 @@ public interface IEvent : IEntity
 
     public DateTime EndDate { get; }
 
-    public Address Address { get; }
+    public string Address { get; }
 }

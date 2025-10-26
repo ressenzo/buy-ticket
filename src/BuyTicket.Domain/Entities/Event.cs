@@ -1,6 +1,5 @@
 using BuyTicket.Domain.Commons;
 using BuyTicket.Domain.Entities.Interfaces;
-using BuyTicket.Domain.ValueObjects;
 
 namespace BuyTicket.Domain.Entities;
 
@@ -10,7 +9,7 @@ public class Event : Entity, IEvent
         string description,
         DateTime startDate,
         DateTime endDate,
-        Address address)
+        string address)
     {
         Name = name;
         Description = description;
@@ -24,7 +23,7 @@ public class Event : Entity, IEvent
         string description,
         DateTime startDate,
         DateTime endDate,
-        Address address) : base(id)
+        string address) : base(id)
     {
         Name = name;
         Description = description;
@@ -41,13 +40,13 @@ public class Event : Entity, IEvent
 
     public DateTime EndDate { get; private set ;}
 
-    public Address Address { get; private set; }
+    public string Address { get; private set; }
 
     public static IEvent Construct(string name,
         string description,
         DateTime startDate,
         DateTime endDate,
-        Address address) =>
+        string address) =>
         new Event(name,
             description,
             startDate,
@@ -59,7 +58,7 @@ public class Event : Entity, IEvent
         string description,
         DateTime startDate,
         DateTime endDate,
-        Address address) =>
+        string address) =>
         new Event(id,
             name,
             description,
@@ -90,7 +89,7 @@ public class Event : Entity, IEvent
             AddError(Error.DateBefore);
             isValid = false;
         }
-        if (Address is null)
+        if (string.IsNullOrWhiteSpace(Address))
         {
             AddError(Error.NullProperty(nameof(Address)));
             isValid = false;

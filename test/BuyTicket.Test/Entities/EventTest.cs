@@ -1,6 +1,5 @@
 using BuyTicket.Domain.Commons;
 using BuyTicket.Domain.Entities;
-using BuyTicket.Domain.ValueObjects;
 using BuyTicket.Test.Builders;
 using BuyTicket.Test.Commons;
 
@@ -12,7 +11,7 @@ public class EventTest
     private readonly string _description;
     private readonly DateTime _startDate;
     private readonly DateTime _endDate;
-    private readonly Address _address;
+    private readonly string _address;
 
     public EventTest()
     {
@@ -20,8 +19,7 @@ public class EventTest
         _description = "Description";
         _startDate = DateTime.Now.AddDays(1);
         _endDate = DateTime.Now.AddDays(2);
-        _address = new AddressBuilder()
-            .Build();
+        _address = "Address";
     }
 
     [Fact]
@@ -144,5 +142,28 @@ public class EventTest
         isValid.ShouldBeFalse();
         @event.Errors.ShouldHaveSingleItem();
         @event.Errors.First().ShouldBe(Error.NullProperty(nameof(Event.Address)));
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData(null)]
+    public void WhenAddressIsInvalid_ShouldReturnIsValidFalse(
+        string address)
+    {
+        // Arrange
+        var @event = Event.Construct(_name,
+            _description,
+            _startDate,
+            _endDate,
+            address);
+
+        // Act
+        var isValid = @event.IsValid();
+
+        // Assert
+        isValid.ShouldBeFalse();
+        @event.Errors.ShouldHaveSingleItem();
+        @event.Errors.First().Message.ShouldContain(nameof(Event.Address));
     }
 }
