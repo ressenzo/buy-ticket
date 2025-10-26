@@ -1,1 +1,1 @@
-This is the application to create tickets for a specific event
+This is the application for tickets domain

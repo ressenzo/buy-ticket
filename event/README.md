@@ -1,1 +1,1 @@
-This is the application to create event
+This is the application for event domain
