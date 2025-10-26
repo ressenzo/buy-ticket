@@ -1,0 +1,1 @@
+Simple solution to simulate buy tickets for event
