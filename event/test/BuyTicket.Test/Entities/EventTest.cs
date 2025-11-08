@@ -1,6 +1,5 @@
 using BuyTicket.Domain.Commons;
 using BuyTicket.Domain.Entities;
-using BuyTicket.Test.Builders;
 using BuyTicket.Test.Commons;
 
 namespace BuyTicket.Test.Entities;
