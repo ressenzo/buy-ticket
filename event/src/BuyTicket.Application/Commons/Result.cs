@@ -2,7 +2,7 @@ using BuyTicket.Domain.Commons;
 
 namespace BuyTicket.Application.Commons;
 
-public class Result<T> where T : class
+public sealed class Result<T> where T : class
 {
     private readonly List<Error> _errors;
 

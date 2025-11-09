@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BuyTicket.Application.CreateEvent;
 
-public class CreateEventUseCase(
+internal sealed class CreateEventUseCase(
     ILogger<CreateEventUseCase> logger,
     IEventFactory eventFactory,
     IEventRepository eventRepository) : ICreateEventUseCase
