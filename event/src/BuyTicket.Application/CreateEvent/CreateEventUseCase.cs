@@ -11,7 +11,9 @@ internal sealed class CreateEventUseCase(
     IEventFactory eventFactory,
     IEventRepository eventRepository) : ICreateEventUseCase
 {
-    public async Task<Result<CreateEventResult>> CreateEvent(CreateEventRequest createEventRequest)
+    public async Task<Result<CreateEventResult>> CreateEvent(
+        CreateEventRequest createEventRequest,
+        CancellationToken cancellationToken)
     {
         logger.LogInformation("Begin process {Process}", nameof(CreateEvent));
         var @event = eventFactory.Construct(createEventRequest);
@@ -24,7 +26,7 @@ internal sealed class CreateEventUseCase(
 
         logger.LogInformation("Event was succesfully created: {Event}",
             @event);
-        await eventRepository.CreateEvent(@event);
+        await eventRepository.CreateEvent(@event, cancellationToken);
         var result = CreateEventResult.FromEntity(@event);
         return Result<CreateEventResult>.Success(result);
     }

@@ -2,7 +2,6 @@ using BuyTicket.Application.Commons;
 using BuyTicket.Application.CreateEvent;
 using BuyTicket.Application.Factories.Interfaces;
 using BuyTicket.Domain.Commons;
-using BuyTicket.Domain.Entities;
 using BuyTicket.Domain.Entities.Interfaces;
 using BuyTicket.Infrastructure.Repositories.Interfaces;
 using BuyTicket.Test.Builders;
@@ -53,11 +52,13 @@ public class CreateEventUseCaseTest
             .Returns(_event.Object);
 
         // Act
-        var result = await _useCase.CreateEvent(request);
+        var result = await _useCase.CreateEvent(request, CancellationToken.None);
 
         // Assert
         result.ResultType.ShouldBe(ResultType.VALIDATION_ERROR);
-        _eventRepository.Verify(x => x.CreateEvent(It.IsAny<IEvent>()), Times.Never);
+        _eventRepository.Verify(x => x.CreateEvent(
+            It.IsAny<IEvent>(),
+            It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
@@ -68,10 +69,12 @@ public class CreateEventUseCaseTest
             .Build();
 
         // Act
-        var result = await _useCase.CreateEvent(request);
+        var result = await _useCase.CreateEvent(request, CancellationToken.None);
 
         // Assert
         result.ResultType.ShouldBe(ResultType.SUCCESS);
-        _eventRepository.Verify(x => x.CreateEvent(It.IsAny<IEvent>()), Times.Once);
+        _eventRepository.Verify(x => x.CreateEvent(
+            It.IsAny<IEvent>(),
+            It.IsAny<CancellationToken>()), Times.Once);
     }
 }

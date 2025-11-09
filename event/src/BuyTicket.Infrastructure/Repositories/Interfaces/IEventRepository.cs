@@ -4,6 +4,6 @@ namespace BuyTicket.Infrastructure.Repositories.Interfaces;
 
 public interface IEventRepository
 {
-    Task CreateEvent(IEvent @event);
-    Task<IEvent> GetEvent(string id);
+    Task CreateEvent(IEvent @event, CancellationToken cancellationToken);
+    Task<IEvent> GetEvent(string id, CancellationToken cancellationToken);
 }

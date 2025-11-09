@@ -4,5 +4,7 @@ namespace BuyTicket.Application.GetEvent;
 
 public interface IGetEventUseCase
 {
-    public Task<Result<GetEventResult>> GetEvent(string id);
+    public Task<Result<GetEventResult>> GetEvent(
+        string id,
+        CancellationToken cancellationToken);
 }

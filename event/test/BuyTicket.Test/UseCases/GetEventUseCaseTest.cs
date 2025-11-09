@@ -31,11 +31,13 @@ public class GetEventUseCaseTest
         string? id)
     {
         // Act
-        var result = await _useCase.GetEvent(id!);
+        var result = await _useCase.GetEvent(id!, CancellationToken.None);
 
         // Assert
         result.ResultType.ShouldBe(ResultType.VALIDATION_ERROR);
-        _eventRepository.Verify(x => x.GetEvent(It.IsAny<string>()), Times.Never);
+        _eventRepository.Verify(x => x.GetEvent(
+            It.IsAny<string>(),
+            It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
@@ -45,11 +47,13 @@ public class GetEventUseCaseTest
         var id = "12345678";
 
         // Act
-        var result = await _useCase.GetEvent(id!);
+        var result = await _useCase.GetEvent(id!, CancellationToken.None);
 
         // Assert
         result.ResultType.ShouldBe(ResultType.NOT_FOUND);
-        _eventRepository.Verify(x => x.GetEvent(It.IsAny<string>()), Times.Once);
+        _eventRepository.Verify(x => x.GetEvent(
+            It.IsAny<string>(),
+            It.IsAny<CancellationToken>()), Times.Once);
     }
     
     [Fact]
@@ -60,14 +64,18 @@ public class GetEventUseCaseTest
         var @event = new EventBuilder()
             .Build();
         _eventRepository
-            .Setup(x => x.GetEvent(It.IsAny<string>()))
+            .Setup(x => x.GetEvent(
+                It.IsAny<string>(),
+                It.IsAny<CancellationToken>()))
             .ReturnsAsync(@event);
 
         // Act
-        var result = await _useCase.GetEvent(id!);
+        var result = await _useCase.GetEvent(id!, CancellationToken.None);
         
         // Assert
         result.ResultType.ShouldBe(ResultType.SUCCESS);
-        _eventRepository.Verify(x => x.GetEvent(It.IsAny<string>()), Times.Once);
+        _eventRepository.Verify(x => x.GetEvent(
+            It.IsAny<string>(),
+            It.IsAny<CancellationToken>()), Times.Once);
     }
 }

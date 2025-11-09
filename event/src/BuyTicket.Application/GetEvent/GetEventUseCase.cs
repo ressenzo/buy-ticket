@@ -9,7 +9,9 @@ internal sealed class GetEventUseCase(
     ILogger<GetEventUseCase> logger,
     IEventRepository eventRepository) : IGetEventUseCase
 {
-    public async Task<Result<GetEventResult>> GetEvent(string id)
+    public async Task<Result<GetEventResult>> GetEvent(
+        string id,
+        CancellationToken cancellationToken)
     {
         logger.LogInformation("Begin process {Process}", nameof(GetEvent));
         if (string.IsNullOrWhiteSpace(id))
@@ -18,7 +20,7 @@ internal sealed class GetEventUseCase(
             return Result<GetEventResult>.ValidationError([error]);
         }
 
-        var @event = await eventRepository.GetEvent(id);
+        var @event = await eventRepository.GetEvent(id, cancellationToken);
         if (@event is null)
         {
             return Result<GetEventResult>.NotFound(
