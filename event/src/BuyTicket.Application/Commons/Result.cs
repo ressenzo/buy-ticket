@@ -31,6 +31,14 @@ public class Result<T> where T : class
     public static Result<T> ValidationError(
         IEnumerable<Error> errors) =>
         new(content: null!, ResultType.VALIDATION_ERROR, errors);
+
+    public static Result<T> NotFound(string message)
+    {
+        var notFoundError = Error.Create(
+            nameof(NotFound),
+            message);
+        return new(content: null!, ResultType.NOT_FOUND, errors: [notFoundError]);
+    }
 }
 
 public enum ResultType

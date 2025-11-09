@@ -15,6 +15,9 @@ public class Error
         Message = message;
     }
 
+    public static Error Create(string code, string message) =>
+        new(code, message);
+
     public static Error InvalidProperty(string propertyName) =>
         new(nameof(InvalidProperty), $"{propertyName} is invalid");
 
