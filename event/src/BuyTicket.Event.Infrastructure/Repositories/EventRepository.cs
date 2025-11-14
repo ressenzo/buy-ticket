@@ -12,21 +12,54 @@ internal sealed class EventRepository(
 {
     private readonly IConnectionFactory _connectionFactory = connectionFactory;
 
-    private const string _SELECT_QUERY = @"SELECT
-        id as Id,
-        name as Name,
-        description as Description,
-        start_date as StartDate,
-        end_date as EndDate
+    private const string _SELECT_QUERY = @$"SELECT
+        id as {nameof(Domain.Entities.Event.Id)},
+        name as {nameof(Domain.Entities.Event.Name)},
+        description as {nameof(Domain.Entities.Event.Description)},
+        start_date as {nameof(Domain.Entities.Event.StartDate)},
+        end_date as {nameof(Domain.Entities.Event.EndDate)},
+        address as {nameof(Domain.Entities.Event.Address)}
         FROM
         events
         WHERE 1=1";
 
-    public Task CreateEvent(
+    private const string _INSERT_QUERY = @"INSERT INTO
+        events
+        (
+            id,
+            name,
+            description,
+            start_date,
+            end_date,
+            address
+        )
+        VALUES
+        (
+            @id,
+            @name,
+            @description,
+            @start_date,
+            @end_date,
+            @address
+        )";
+
+    public async Task CreateEvent(
         IEvent @event,
         CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        using var connection = _connectionFactory.CreateConnection();
+        var query = new StringBuilder(_INSERT_QUERY);
+        await connection.ExecuteAsync(
+            query.ToString(),
+            new
+            {
+                @event.Id,
+                @event.Name,
+                @event.Description,
+                @start_date = @event.StartDate,
+                @end_date = @event.EndDate,
+                @event.Address
+            });
     }
 
     public async Task<IEvent?> GetEvent(
