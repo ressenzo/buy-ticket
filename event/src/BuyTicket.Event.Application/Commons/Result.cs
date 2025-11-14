@@ -39,6 +39,9 @@ public sealed class Result<T> where T : class
             message);
         return new(content: null!, ResultType.NOT_FOUND, errors: [notFoundError]);
     }
+
+    public static Result<T> InternalError() =>
+        new(content: null!, ResultType.INTERNAL_ERROR, errors: [Error.InternalError()]);
 }
 
 public enum ResultType

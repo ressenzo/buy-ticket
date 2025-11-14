@@ -77,4 +77,26 @@ public class CreateEventUseCaseTest
             It.IsAny<IEvent>(),
             It.IsAny<CancellationToken>()), Times.Once);
     }
+
+    [Fact]
+    public async Task WhenExceptionIsThrow_ShouldReturnInternalError()
+    {
+        // Arrange
+        var request = new CreateEventRequestBuilder()
+            .Build();
+        _eventRepository
+            .Setup(x => x.CreateEvent(
+                It.IsAny<IEvent>(),
+                It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new Exception("Error"));
+
+        // Act
+        var result = await _useCase.CreateEvent(request, CancellationToken.None);
+        
+        // Assert
+        result.ResultType.ShouldBe(ResultType.INTERNAL_ERROR);
+        result.Errors.ShouldNotBeEmpty();
+        result.Errors.First().Code.Equals(Error.InternalError().Code);
+        result.Errors.First().Message.Equals(Error.InternalError().Message);
+    }
 }

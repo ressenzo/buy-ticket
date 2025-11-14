@@ -13,21 +13,29 @@ internal sealed class GetEventUseCase(
         string id,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation("Begin process {Process}", nameof(GetEvent));
-        if (string.IsNullOrWhiteSpace(id))
+        try
         {
-            var error = Error.InvalidProperty(nameof(id));
-            return Result<GetEventResult>.ValidationError([error]);
-        }
+            logger.LogInformation("Begin process {Process}", nameof(GetEvent));
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                var error = Error.InvalidProperty(nameof(id));
+                return Result<GetEventResult>.ValidationError([error]);
+            }
 
-        var @event = await eventRepository.GetEvent(id, cancellationToken);
-        if (@event is null)
+            var @event = await eventRepository.GetEvent(id, cancellationToken);
+            if (@event is null)
+            {
+                return Result<GetEventResult>.NotFound(
+                    message: $"Event {id} was not found");
+            }
+
+            var result = GetEventResult.FromEntity(@event);
+            return Result<GetEventResult>.Success(result);
+        }
+        catch (Exception ex)
         {
-            return Result<GetEventResult>.NotFound(
-                message: $"Event {id} was not found");
+            logger.LogError(ex, "{Message}", ex.Message);
+            return Result<GetEventResult>.InternalError();
         }
-
-        var result = GetEventResult.FromEntity(@event);
-        return Result<GetEventResult>.Success(result);
     }
 }

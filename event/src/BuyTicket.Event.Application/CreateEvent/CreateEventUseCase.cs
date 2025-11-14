@@ -15,19 +15,27 @@ internal sealed class CreateEventUseCase(
         CreateEventRequest createEventRequest,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation("Begin process {Process}", nameof(CreateEvent));
-        var @event = eventFactory.Construct(createEventRequest);
-        if (!@event.IsValid())
+        try
         {
-            logger.LogError("Errors: {Errors}", @event.Errors);
-            return Result<CreateEventResult>.ValidationError(
-                @event.Errors);
-        }
+            logger.LogInformation("Begin process {Process}", nameof(CreateEvent));
+            var @event = eventFactory.Construct(createEventRequest);
+            if (!@event.IsValid())
+            {
+                logger.LogError("Errors: {Errors}", @event.Errors);
+                return Result<CreateEventResult>.ValidationError(
+                    @event.Errors);
+            }
 
-        logger.LogInformation("Event was succesfully created: {Event}",
-            @event);
-        await eventRepository.CreateEvent(@event, cancellationToken);
-        var result = CreateEventResult.FromEntity(@event);
-        return Result<CreateEventResult>.Success(result);
+            logger.LogInformation("Event was succesfully created: {Event}",
+                @event);
+            await eventRepository.CreateEvent(@event, cancellationToken);
+            var result = CreateEventResult.FromEntity(@event);
+            return Result<CreateEventResult>.Success(result);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "{Message}", ex.Message);
+            return Result<CreateEventResult>.InternalError();
+        }
     }
 }

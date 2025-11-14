@@ -1,5 +1,6 @@
 using BuyTicket.Event.Application.Commons;
 using BuyTicket.Event.Application.GetEvent;
+using BuyTicket.Event.Domain.Commons;
 using BuyTicket.Event.Domain.Entities.Interfaces;
 using BuyTicket.Event.Infrastructure.Repositories.Interfaces;
 using BuyTicket.Event.Test.Builders;
@@ -77,5 +78,26 @@ public class GetEventUseCaseTest
         _eventRepository.Verify(x => x.GetEvent(
             It.IsAny<string>(),
             It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task WhenExceptionIsThrow_ShouldReturnInternalError()
+    {
+        // Arrange
+        var id = "12345678";
+        _eventRepository
+            .Setup(x => x.GetEvent(
+                It.IsAny<string>(),
+                It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new Exception("Error"));
+
+        // Act
+        var result = await _useCase.GetEvent(id!, CancellationToken.None);
+        
+        // Assert
+        result.ResultType.ShouldBe(ResultType.INTERNAL_ERROR);
+        result.Errors.ShouldNotBeEmpty();
+        result.Errors.First().Code.Equals(Error.InternalError().Code);
+        result.Errors.First().Message.Equals(Error.InternalError().Message);
     }
 }

@@ -29,4 +29,7 @@ public class Error
 
     public static Error NullProperty(string propertyName) =>
         new(nameof(NullProperty), $"{propertyName} can not be null");
+
+    public static Error InternalError() =>
+        new(nameof(InternalError), "Something went wrong. Try again!");
 }

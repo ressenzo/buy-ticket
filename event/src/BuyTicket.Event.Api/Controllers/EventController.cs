@@ -24,7 +24,9 @@ public sealed class EventController(
         {
             ResultType.NOT_FOUND => NotFound(result.Errors),
             ResultType.SUCCESS => Ok(result.Content),
-            _ => StatusCode((int)HttpStatusCode.InternalServerError, "An error has happened")
+            _ => StatusCode(
+                    (int)HttpStatusCode.InternalServerError,
+                    result.Errors)
         };
     }
 
@@ -46,7 +48,9 @@ public sealed class EventController(
         {
             ResultType.VALIDATION_ERROR => BadRequest(result.Errors),
             ResultType.SUCCESS => Created($"/api/events/id/{result!.Content!.Id}", result.Content),
-            _ => StatusCode((int)HttpStatusCode.InternalServerError, "An error has happened")
+            _ => StatusCode(
+                    (int)HttpStatusCode.InternalServerError,
+                    result.Errors)
         };
     }
 }
