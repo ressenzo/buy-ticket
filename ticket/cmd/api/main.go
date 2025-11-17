@@ -16,7 +16,7 @@ func main() {
 		log.Fatalf("Error initializing database: %v", conn)
 	}
 
-	eventRepository := repository.NewEventRepository("http://localhost:5001")
+	eventRepository := repository.NewEventRepository("http://localhost:5025")
 	ticketRepository := repository.NewTicketRepository(conn)
 	ticketService := service.NewTicketService(eventRepository, ticketRepository, conn)
 	ticketHandler := handlers.NewTicketHandler(ticketService)
