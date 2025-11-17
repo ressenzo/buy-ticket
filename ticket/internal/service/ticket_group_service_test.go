@@ -38,8 +38,12 @@ func TestCreateTickets(t *testing.T) {
 	t.Run("event id is empty", func(t *testing.T) {
 		ticketGroup := domain.TicketGroup{}
 
-		got := service.CreateTickets(context.Background(), ticketGroup)
+		result, got := service.CreateTickets(context.Background(), ticketGroup)
 		expected := "event id can not be empty"
+
+		if result != nil {
+			t.Error("result should be null")
+		}
 
 		if got.Error() != expected {
 			t.Errorf("expected = %s; got = %s", expected, got)
@@ -51,8 +55,12 @@ func TestCreateTickets(t *testing.T) {
 			EventId: "12345678",
 		}
 
-		got := service.CreateTickets(context.Background(), ticketGroup)
+		result, got := service.CreateTickets(context.Background(), ticketGroup)
 		expected := "it is necessary to have, at least, 1 ticket"
+
+		if result != nil {
+			t.Error("result should be null")
+		}
 
 		if got.Error() != expected {
 			t.Errorf("expected = %s; got = %s", expected, got)
@@ -73,7 +81,11 @@ func TestCreateTickets(t *testing.T) {
 
 		expected := "event does not exist"
 		eventRepo.On("GetEvent", eventId).Return((*repository.Event)(nil), nil)
-		got := service.CreateTickets(context.Background(), ticketGroup)
+		result, got := service.CreateTickets(context.Background(), ticketGroup)
+
+		if result != nil {
+			t.Error("result should be null")
+		}
 
 		if got.Error() != expected {
 			t.Errorf("expected = %s; got = %s", expected, got)
@@ -94,7 +106,11 @@ func TestCreateTickets(t *testing.T) {
 
 		expected := "error to get event"
 		eventRepo.On("GetEvent", eventId).Return((*repository.Event)(nil), errors.New(expected))
-		got := service.CreateTickets(context.Background(), ticketGroup)
+		result, got := service.CreateTickets(context.Background(), ticketGroup)
+
+		if result != nil {
+			t.Error("result should be null")
+		}
 
 		if got.Error() != expected {
 			t.Errorf("expected = %s; got = %s", expected, got)

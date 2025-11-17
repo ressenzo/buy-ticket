@@ -7,11 +7,12 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 )
 
 type TicketService interface {
-	CreateTickets(ctx context.Context, ticketGroup domain.TicketGroup) error
+	CreateTickets(ctx context.Context, ticketGroup domain.TicketGroup) (*domain.TicketGroup, error)
 }
 
 type ticketService struct {
@@ -28,26 +29,26 @@ func NewTicketService(eventRepository repository.EventRepository, ticketReposito
 	}
 }
 
-func (s *ticketService) CreateTickets(ctx context.Context, ticketGroup domain.TicketGroup) error {
+func (s *ticketService) CreateTickets(ctx context.Context, ticketGroup domain.TicketGroup) (*domain.TicketGroup, error) {
 	if ticketGroup.EventId == "" {
-		return errors.New("event id can not be empty")
+		return nil, errors.New("event id can not be empty")
 	}
 
 	if len(ticketGroup.Tickets) == 0 {
-		return errors.New("it is necessary to have, at least, 1 ticket")
+		return nil, errors.New("it is necessary to have, at least, 1 ticket")
 	}
 
 	event, err := s.eventRepository.GetEvent(ticketGroup.EventId)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if event == nil {
-		return errors.New("event does not exist")
+		return nil, errors.New("event does not exist")
 	}
 
 	tx, err := s.db.Begin(context.Background())
 	if err != nil {
-		return fmt.Errorf("%v", err)
+		return nil, fmt.Errorf("%v", err)
 	}
 
 	defer func() {
@@ -59,11 +60,12 @@ func (s *ticketService) CreateTickets(ctx context.Context, ticketGroup domain.Ti
 	}()
 
 	for _, ticket := range ticketGroup.Tickets {
+		ticket.Id = uuid.New().String()[0:8]
 		err = s.ticketRepository.CreateTicket(ctx, tx, ticketGroup.EventId, ticket)
 		if err != nil {
-			return fmt.Errorf("could not create ticket: %v", err)
+			return nil, fmt.Errorf("could not create ticket: %v", err)
 		}
 	}
 
-	return err
+	return &ticketGroup, err
 }
