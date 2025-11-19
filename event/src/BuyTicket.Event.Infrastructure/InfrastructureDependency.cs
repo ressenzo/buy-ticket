@@ -1,7 +1,7 @@
+using BuyTicket.Event.Application.Repositories;
 using BuyTicket.Event.Infrastructure.Factories;
 using BuyTicket.Event.Infrastructure.Factories.Interfaces;
 using BuyTicket.Event.Infrastructure.Repositories;
-using BuyTicket.Event.Infrastructure.Repositories.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BuyTicket.Event.Infrastructure;

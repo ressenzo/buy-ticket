@@ -1,6 +1,6 @@
 using BuyTicket.Event.Application.Commons;
+using BuyTicket.Event.Application.Repositories;
 using BuyTicket.Event.Domain.Commons;
-using BuyTicket.Event.Infrastructure.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace BuyTicket.Event.Application.GetEvent;

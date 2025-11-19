@@ -1,8 +1,8 @@
 using System.Text;
+using BuyTicket.Event.Application.Repositories;
 using BuyTicket.Event.Domain.Entities.Interfaces;
 using BuyTicket.Event.Infrastructure.Factories.Interfaces;
 using BuyTicket.Event.Infrastructure.Models;
-using BuyTicket.Event.Infrastructure.Repositories.Interfaces;
 using Dapper;
 
 namespace BuyTicket.Event.Infrastructure.Repositories;

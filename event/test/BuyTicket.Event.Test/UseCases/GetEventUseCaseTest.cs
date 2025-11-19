@@ -1,8 +1,7 @@
 using BuyTicket.Event.Application.Commons;
 using BuyTicket.Event.Application.GetEvent;
+using BuyTicket.Event.Application.Repositories;
 using BuyTicket.Event.Domain.Commons;
-using BuyTicket.Event.Domain.Entities.Interfaces;
-using BuyTicket.Event.Infrastructure.Repositories.Interfaces;
 using BuyTicket.Event.Test.Builders;
 using Microsoft.Extensions.Logging;
 using Moq;

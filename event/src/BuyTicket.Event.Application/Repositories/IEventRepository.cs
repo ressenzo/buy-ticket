@@ -1,6 +1,6 @@
 using BuyTicket.Event.Domain.Entities.Interfaces;
 
-namespace BuyTicket.Event.Infrastructure.Repositories.Interfaces;
+namespace BuyTicket.Event.Application.Repositories;
 
 public interface IEventRepository
 {

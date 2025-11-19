@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BuyTicket.Event.Domain\BuyTicket.Event.Domain.csproj" />
+    <ProjectReference Include="..\BuyTicket.Event.Application\BuyTicket.Event.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
