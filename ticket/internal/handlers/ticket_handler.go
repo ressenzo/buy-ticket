@@ -1,9 +1,10 @@
 package handlers
 
 import (
-	"buy_ticket/ticket/cmd/handlers/dto"
 	"buy_ticket/ticket/internal/domain"
+	"buy_ticket/ticket/internal/handlers/dto"
 	"buy_ticket/ticket/internal/service"
+	"buy_ticket/ticket/internal/utils"
 	"context"
 	"fmt"
 	"net/http"
@@ -34,9 +35,10 @@ func (h *ticketHandler) RegisterRoutes(r *gin.Engine) {
 func (h *ticketHandler) CreateTickets(ctx *gin.Context) {
 	var ticketGroupDto dto.TicketGroupDto
 	if err := ctx.ShouldBindJSON(&ticketGroupDto); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": "invalid format for body",
-		})
+		utils.Error(
+			ctx,
+			http.StatusBadRequest,
+			"invalid format for body")
 		fmt.Println(err.Error())
 		return
 	}
@@ -57,13 +59,16 @@ func (h *ticketHandler) CreateTickets(ctx *gin.Context) {
 		ticketGroup.Tickets = append(ticketGroup.Tickets, ticket)
 	}
 
-	result, err := h.service.CreateTickets(context.Background(), ticketGroup)
+	result, err := h.service.CreateTickets(
+		context.Background(),
+		ticketGroup)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
+		utils.Error(
+			ctx,
+			http.StatusBadRequest,
+			err.Error())
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, result)
+	utils.Success(ctx, http.StatusCreated, result)
 }

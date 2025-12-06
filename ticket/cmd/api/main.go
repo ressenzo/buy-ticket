@@ -2,7 +2,7 @@ package main
 
 import (
 	"buy_ticket/ticket/cmd/config"
-	"buy_ticket/ticket/cmd/handlers"
+	"buy_ticket/ticket/internal/handlers"
 	"buy_ticket/ticket/internal/repository"
 	"buy_ticket/ticket/internal/service"
 	"log"
