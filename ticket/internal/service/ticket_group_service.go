@@ -2,7 +2,6 @@ package service
 
 import (
 	"buy_ticket/ticket/internal/domain"
-	"buy_ticket/ticket/internal/repository"
 	"context"
 	"errors"
 	"fmt"
@@ -16,12 +15,12 @@ type TicketService interface {
 }
 
 type ticketService struct {
-	eventRepository  repository.EventRepository
-	ticketRepository repository.TicketRepository
+	eventRepository  EventRepository
+	ticketRepository TicketRepository
 	db               *pgx.Conn
 }
 
-func NewTicketService(eventRepository repository.EventRepository, ticketRepository repository.TicketRepository, db *pgx.Conn) TicketService {
+func NewTicketService(eventRepository EventRepository, ticketRepository TicketRepository, db *pgx.Conn) TicketService {
 	return &ticketService{
 		eventRepository:  eventRepository,
 		ticketRepository: ticketRepository,
@@ -29,6 +28,7 @@ func NewTicketService(eventRepository repository.EventRepository, ticketReposito
 	}
 }
 
+// TODO: control transaction
 func (s *ticketService) CreateTickets(ctx context.Context, ticketGroup domain.TicketGroup) (*domain.TicketGroup, error) {
 	if ticketGroup.EventId == "" {
 		return nil, errors.New("event id can not be empty")
@@ -46,22 +46,9 @@ func (s *ticketService) CreateTickets(ctx context.Context, ticketGroup domain.Ti
 		return nil, errors.New("event does not exist")
 	}
 
-	tx, err := s.db.Begin(context.Background())
-	if err != nil {
-		return nil, fmt.Errorf("%v", err)
-	}
-
-	defer func() {
-		if err != nil {
-			tx.Rollback(ctx)
-		} else {
-			err = tx.Commit(ctx)
-		}
-	}()
-
 	for _, ticket := range ticketGroup.Tickets {
 		ticket.Id = uuid.New().String()[0:8]
-		err = s.ticketRepository.CreateTicket(ctx, tx, ticketGroup.EventId, ticket)
+		err = s.ticketRepository.CreateTicket(ticketGroup.EventId, ticket)
 		if err != nil {
 			return nil, fmt.Errorf("could not create ticket: %v", err)
 		}

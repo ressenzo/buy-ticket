@@ -2,7 +2,6 @@ package service
 
 import (
 	"buy_ticket/ticket/internal/domain"
-	"buy_ticket/ticket/internal/repository"
 	"context"
 	"errors"
 	"testing"
@@ -15,17 +14,17 @@ type MockEventRepository struct {
 	mock.Mock
 }
 
-func (m *MockEventRepository) GetEvent(eventId string) (*repository.Event, error) {
+func (m *MockEventRepository) GetEvent(eventId string) (*Event, error) {
 	args := m.Called(eventId)
-	return args.Get(0).(*repository.Event), args.Error(1)
+	return args.Get(0).(*Event), args.Error(1)
 }
 
 type MockTicketRepository struct {
 	mock.Mock
 }
 
-func (m *MockTicketRepository) CreateTicket(ctx context.Context, tx pgx.Tx, eventId string, ticket domain.Ticket) error {
-	args := m.Called(ctx, tx, eventId, ticket)
+func (m *MockTicketRepository) CreateTicket(eventId string, ticket domain.Ticket) error {
+	args := m.Called(eventId, ticket)
 	return args.Error(0)
 }
 
@@ -80,7 +79,7 @@ func TestCreateTickets(t *testing.T) {
 		}
 
 		expected := "event does not exist"
-		eventRepo.On("GetEvent", eventId).Return((*repository.Event)(nil), nil)
+		eventRepo.On("GetEvent", eventId).Return((*Event)(nil), nil)
 		result, got := service.CreateTickets(context.Background(), ticketGroup)
 
 		if result != nil {
@@ -105,7 +104,7 @@ func TestCreateTickets(t *testing.T) {
 		}
 
 		expected := "error to get event"
-		eventRepo.On("GetEvent", eventId).Return((*repository.Event)(nil), errors.New(expected))
+		eventRepo.On("GetEvent", eventId).Return((*Event)(nil), errors.New(expected))
 		result, got := service.CreateTickets(context.Background(), ticketGroup)
 
 		if result != nil {
